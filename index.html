@@ -1,129 +1,237 @@
-<!DOCTYPE html><html lang="tr">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Robux Generator</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: black;
-      color: #00ff00;
-      font-family: monospace;
-      overflow-x: hidden;
-    }
-    .matrix {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      background: black;
-      animation: backgroundMatrix 10s linear infinite;
-    }
-    @keyframes backgroundMatrix {
-      0% {background-position: 0 0;}
-      100% {background-position: 0 1000px;}
-    }
-    .panel {
-      max-width: 500px;
-      margin: 50px auto;
-      background: rgba(0,0,0,0.9);
-      border: 2px solid #00ff00;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 0 20px #00ff00;
-    }
-    .fake-info {
-      background: #111;
-      padding: 10px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
-    .progress-bar {
-      width: 100%;
-      background: #222;
-      border: 1px solid #00ff00;
-      height: 25px;
-      border-radius: 5px;
-      overflow: hidden;
-      margin-top: 10px;
-    }
-    .progress {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, lime, green);
-      animation: loadProgress 5s linear forwards;
-    }
-    @keyframes loadProgress {
-      from {width: 0%;}
-      to {width: 100%;}
-    }
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 5px;
-      border: none;
-      font-size: 16px;
-    }
-    button {
-      background: #00ff00;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    #success {
-      margin-top: 20px;
-      font-size: 18px;
-      color: lime;
-    }
-    .footer {
-      margin-top: 30px;
-      font-size: 14px;
-      text-align: center;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Free Robux Generator</title>
+<style>
+  body {
+    margin: 0; padding: 0;
+    background: black;
+    color: #0f0;
+    font-family: monospace;
+    overflow-x: hidden;
+  }
+  .panel {
+    max-width: 600px;
+    background: rgba(0,0,0,0.85);
+    margin: 40px auto;
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid #0f0;
+    box-shadow: 0 0 20px #0f0;
+  }
+  input, button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: none;
+    background: #111;
+    color: #0f0;
+    box-sizing: border-box;
+  }
+  button {
+    background: #0f0;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: #0c0;
+  }
+  .fake-info {
+    background: #111;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    line-height: 1.5;
+  }
+  .progress-bar {
+    width: 100%;
+    background: #222;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 15px;
+    height: 24px;
+    border: 1px solid #0f0;
+  }
+  .progress {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #0f0, #080);
+    transition: width 0.4s ease;
+  }
+  #result {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #0f0;
+    min-height: 30px;
+  }
+  .footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 14px;
+    color: #666;
+  }
+  #activeUsers {
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 18px;
+  }
+  #botMessages {
+    background: #000;
+    border: 1px solid #0f0;
+    height: 80px;
+    overflow-y: auto;
+    padding: 10px;
+    margin: 15px 0;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.3;
+  }
+  #transactions {
+    height: 100px;
+    overflow: hidden;
+    background: #111;
+    border: 1px solid #0f0;
+    border-radius: 8px;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 14px;
+  }
+  @keyframes scrollUp {
+    0% { transform: translateY(0);}
+    100% { transform: translateY(-100%);}
+  }
+  #transactions div {
+    animation: scrollUp 20s linear infinite;
+  }
+</style>
 </head>
 <body>
-  <div class="matrix"></div>
-  <div class="panel">
-    <div class="fake-info">
-      <p>🌐 IP Adresi: 192.168.1.***</p>
-      <p>📍 Konum: ****, Türkiye</p>
-      <p>👤 Kullanıcı: roblox_user***</p>
-    </div>
-    <p><strong>Kullanıcı bilgileri tespit edildi.</strong></p>
-    <input type="text" id="username" placeholder="Roblox Kullanıcı Adı">
-    <input type="number" id="amount" placeholder="Robux Miktarı">
-    <button onclick="generate()">Robux Üret</button>
-    <div class="progress-bar" id="bar" style="display:none;">
-      <div class="progress" id="progress"></div>
-    </div>
-    <div id="success"></div>
-    <div class="footer">
-      <p>Yapımcı: AlazOflaz</p>
-    </div>
+
+<div class="panel">
+
+  <div class="fake-info">
+    🌐 IP Adresi: 192.168.1.***<br />
+    📍 Konum: Ankara, Türkiye<br />
+    👤 Kullanıcı: guest_45K9X72
   </div>
-  <script>
-    function generate() {
-      const user = document.getElementById("username").value;
-      const amount = document.getElementById("amount").value;
-      const bar = document.getElementById("bar");
-      const success = document.getElementById("success");if (!user || !amount) {
-    alert("Lütfen kullanıcı adı ve robux miktarını girin.");
-    return;
+
+  <div id="activeUsers">Şu anda 132 kişi aktif</div>
+
+  <input type="text" id="username" placeholder="Roblox Kullanıcı Adı" value="guest_45K9X72" disabled />
+  <input type="number" id="amount" placeholder="Robux Miktarı" />
+
+  <button onclick="startGeneration()">Robux Oluştur</button>
+
+  <div class="progress-bar" id="progressBar" style="display:none;">
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <div id="result"></div>
+
+  <div id="botMessages"></div>
+
+  <div id="transactions">
+    <div id="transactionsContent"></div>
+  </div>
+
+  <div class="footer">Yapımcı: AlazOflaz</div>
+</div>
+
+<script>
+  // Aktif kullanıcı sayısı animasyonu
+  let activeUsers = 132;
+  const activeUsersEl = document.getElementById('activeUsers');
+  setInterval(() => {
+    const change = Math.floor(Math.random() * 5) * (Math.random() < 0.5 ? 1 : -1);
+    activeUsers = Math.max(50, activeUsers + change);
+    activeUsersEl.textContent = `Şu anda ${activeUsers} kişi aktif`;
+  }, 3000);
+
+  // Bot mesajları
+  const botMessagesEl = document.getElementById('botMessages');
+  const botMsgs = [
+    "Sunucu Robux’u başarıyla gönderdi.",
+    "EpicGames ID’niz doğrulandı.",
+    "Transfer başarılı ✅",
+    "Sistem işlemi onayladı.",
+    "Robux bakiyeniz güncellendi.",
+    "Güvenlik kontrolü tamamlandı.",
+    "Veri bağlantısı stabil.",
+    "Dosyalar indirildi.",
+    "Yeni protokol aktif edildi."
+  ];
+  let botMsgIndex = 0;
+
+  function addBotMessage() {
+    if (botMsgIndex >= botMsgs.length) botMsgIndex = 0;
+    const msg = document.createElement('div');
+    msg.textContent = botMsgs[botMsgIndex++];
+    botMessagesEl.appendChild(msg);
+    botMessagesEl.scrollTop = botMessagesEl.scrollHeight;
   }
+  setInterval(addBotMessage, 3500);
 
-  bar.style.display = 'block';
-  success.innerHTML = "";
+  // Sahte işlemler listesi
+  const transactionsContent = document.getElementById('transactionsContent');
+  const fakeUsers = [
+    "Alaz06", "NisaLover", "Yağmur", "OflazX", "EpicPlayer", "ShadowGamer", "NoobMaster", "ProKanka",
+    "RobloxFan", "KingOfRobux", "SweetGirl", "RealPlayer", "BestGamer", "XxSniperxX", "CutePlayer"
+  ];
+  function randomAmount() {
+    return Math.floor(Math.random() * 9000) + 1000; // 1000 - 9999
+  }
+  function generateTransactions() {
+    let html = '';
+    for (let i = 0; i < fakeUsers.length; i++) {
+      html += `${fakeUsers[i]} adlı hesaba ${randomAmount()} Robux gönderildi.<br>`;
+    }
+    transactionsContent.innerHTML = html + html; // 2x for smooth scroll
+  }
+  generateTransactions();
 
-  setTimeout(() => {
-    success.innerHTML = `✅ <strong>${user}</strong> isimli hesabınıza <strong>${amount}</strong> Robux gönderildi.`;
-  }, 5200);
-}
+  // Scroll animasyon
+  function animateScroll() {
+    transactionsContent.style.transform = 'translateY(0)';
+    let pos = 0;
+    setInterval(() => {
+      pos -= 1;
+      if (pos <= -transactionsContent.scrollHeight / 2) pos = 0;
+      transactionsContent.style.transform = `translateY(${pos}px)`;
+    }, 80);
+  }
+  animateScroll();
 
-  </script>
+  // Robux oluşturma fonksiyonu
+  function startGeneration() {
+    const amount = document.getElementById('amount').value.trim();
+    if (!amount || isNaN(amount) || amount <= 0) {
+      alert("Lütfen geçerli bir Robux miktarı girin.");
+      return;
+    }
+    document.getElementById('progressBar').style.display = 'block';
+    const progress = document.getElementById('progress');
+    const result = document.getElementById('result');
+    progress.style.width = '0%';
+    result.textContent = '';
+    let width = 0;
+    const interval = setInterval(() => {
+      if (width >= 100) {
+        clearInterval(interval);
+        result.textContent = `✅ guest_45K9X72 isimli hesabınıza ${amount} Robux gönderildi.`;
+      } else {
+        width += 1.5;
+        progress.style.width = width + '%';
+      }
+    }, 50);
+  }
+</script>
+
 </body>
 </html>
