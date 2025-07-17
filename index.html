@@ -1,117 +1,128 @@
-<!DOCTYPE html>
-<html lang="tr">
+<!DOCTYPE html><html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Free Robux Generator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ücretsiz Robux Oluşturucu</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
+      background-color: black;
+      color: #00ff00;
+      overflow-x: hidden;
+    }
+    .matrix-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    .panel {
+      max-width: 500px;
+      margin: 50px auto;
+      background-color: rgba(0,0,0,0.8);
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+      padding: 20px;
       text-align: center;
-      padding: 40px;
+      box-shadow: 0 0 20px #00ff00;
     }
-
     input, button {
-      padding: 12px;
-      font-size: 18px;
-      margin: 10px;
-      border-radius: 8px;
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      font-size: 16px;
       border: none;
+      border-radius: 5px;
     }
-
     input {
-      width: 200px;
+      background: #111;
+      color: #0f0;
     }
-
     button {
       background-color: #00cc00;
-      color: #fff;
+      color: black;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
     }
-
-    button:hover {
-      background-color: #009900;
-    }
-
     #progressBar {
-      width: 100%;
-      background: #444;
-      margin-top: 30px;
-      height: 25px;
+      width: 100%; background: #333; height: 20px;
       border-radius: 10px;
+      margin-top: 10px;
       overflow: hidden;
-      display: none;
     }
-
     #barFill {
-      height: 100%;
-      width: 0%;
-      background: #00ff00;
-      transition: width 0.3s;
+      height: 100%; width: 0%; background: #00ff00;
+      transition: width 0.2s;
     }
-
-    #result-box {
-      display: none;
-      margin-top: 30px;
+    #result {
+      margin-top: 20px;
       font-size: 20px;
     }
-
-    .badge {
-      margin-top: 10px;
-      font-size: 22px;
-      color: gold;
+    .footer {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #888;
     }
   </style>
 </head>
-<body>
+<body><canvas class="matrix-bg" id="matrix"></canvas>
 
-  <h1>💰 Ücretsiz Robux Üretici 💰</h1>
-
-  <input type="number" id="robuxAmount" placeholder="Robux miktarı gir">
-  <br>
-  <button onclick="startGeneration()">Robux Üret</button>
-
+<div class="panel">
+  <h2>Robux Oluşturucu</h2>
+  <input type="text" id="ip" placeholder="Fake IP (örn. 192.168.1.1)">
+  <input type="text" id="location" placeholder="Konum (örn. Ankara)">
+  <input type="text" id="username" placeholder="Kullanıcı Adı">
+  <input type="number" id="robuxAmount" placeholder="Robux Miktarı">
+  <button onclick="startGeneration()">Robux Oluştur</button>
   <div id="progressBar">
     <div id="barFill"></div>
   </div>
+  <div id="result"></div>
+  <div class="footer">Yapımcı: AlazOflaz</div>
+</div><script>
+function startGeneration() {
+  const robux = document.getElementById("robuxAmount").value;
+  if (!robux || robux <= 0) {
+    alert("Lütfen geçerli bir Robux miktarı girin.");
+    return;
+  }
 
-  <div id="result-box">
-    <p id="addedAmount"></p>
-    <p class="badge">🏅 Başarı Rozeti Kazandınız!</p>
-  </div>
+  document.getElementById("barFill").style.width = "0%";
+  document.getElementById("result").innerText = "";
 
-  <script>
-    function startGeneration() {
-      const robuxAmount = document.getElementById("robuxAmount").value;
-      if (!robuxAmount || robuxAmount <= 0) {
-        alert("Lütfen geçerli bir Robux miktarı girin.");
-        return;
-      }
-
-      document.getElementById("progressBar").style.display = "block";
-      document.getElementById("barFill").style.width = "0%";
-      document.getElementById("result-box").style.display = "none";
-
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += 2;
-        document.getElementById("barFill").style.width = progress + "%";
-        if (progress >= 100) {
-          clearInterval(interval);
-          showResult(robuxAmount);
-        }
-      }, 50);
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += 2;
+    document.getElementById("barFill").style.width = progress + "%";
+    if (progress >= 100) {
+      clearInterval(interval);
+      document.getElementById("result").innerHTML = `<p style='color:lime;'>${robux} Robux başarıyla yüklendi!</p><p>🏅 Başarı Rozeti Kazandınız!</p>`;
     }
+  }, 50);
+}
 
-    function showResult(amount) {
-      document.getElementById("result-box").style.display = "block";
-      document.getElementById("addedAmount").innerText =
-        `${amount} Robux hesabınıza başarıyla eklendi ✅`;
-    }
-  </script>
-
-</body>
+// Matrix efekt
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+const letters = Array(256).join("1").split("");
+let drops = [];
+for (let i = 0; i < canvas.width / 10; i++) drops[i] = 1;
+function drawMatrix() {
+  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "#0F0";
+  ctx.font = "15px monospace";
+  for (let i = 0; i < drops.length; i++) {
+    const text = letters[Math.floor(Math.random() * letters.length)];
+    ctx.fillText(text, i * 10, drops[i] * 20);
+    if (drops[i] * 20 > canvas.height || Math.random() > 0.95) drops[i] = 0;
+    drops[i]++;
+  }
+}
+setInterval(drawMatrix, 33);
+</script></body>
 </html>
