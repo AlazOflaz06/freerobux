@@ -2,127 +2,131 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ücretsiz Robux Oluşturucu</title>
+  <title>Robux Generator</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: black;
-      color: #00ff00;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #000;
+      color: #0f0;
       overflow-x: hidden;
     }
-    .matrix-bg {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -1;
-      pointer-events: none;
-    }
-    .panel {
-      max-width: 500px;
-      margin: 50px auto;
-      background-color: rgba(0,0,0,0.8);
-      border: 2px solid #00ff00;
-      border-radius: 10px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 0 20px #00ff00;
-    }
-    input, button {
-      padding: 10px;
-      margin: 10px 0;
-      width: 100%;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-    }
-    input {
+    .terminal-box {
       background: #111;
-      color: #0f0;
+      padding: 20px;
+      border: 2px solid #0f0;
+      width: 90%;
+      max-width: 600px;
+      margin: 50px auto;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #0f0;
+      white-space: pre-line;
     }
-    button {
-      background-color: #00cc00;
-      color: black;
-      font-weight: bold;
-      cursor: pointer;
+    .hidden {
+      display: none;
     }
-    #progressBar {
-      width: 100%; background: #333; height: 20px;
-      border-radius: 10px;
-      margin-top: 10px;
+    .typewriter span {
+      display: inline-block;
+      border-right: 2px solid #0f0;
+      white-space: nowrap;
       overflow: hidden;
+      animation: typing 3s steps(40, end), blink 0.75s step-end infinite;
     }
-    #barFill {
-      height: 100%; width: 0%; background: #00ff00;
-      transition: width 0.2s;
+    @keyframes typing {
+      from {
+        width: 0;
+      }
+      to {
+        width: 100%;
+      }
     }
-    #result {
-      margin-top: 20px;
-      font-size: 20px;
+    @keyframes blink {
+      from, to {
+        border-color: transparent;
+      }
+      50% {
+        border-color: #0f0;
+      }
     }
-    .footer {
-      margin-top: 30px;
-      font-size: 14px;
+    .main-panel {
+      background-color: #111;
+      padding: 20px;
+      width: 90%;
+      max-width: 700px;
+      margin: 20px auto;
+      border: 2px solid #0f0;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #0f0;
+    }
+    .main-panel input, .main-panel button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      background-color: #000;
+      color: #0f0;
+      border: 1px solid #0f0;
+      border-radius: 4px;
+    }
+    .progress-bar {
+      height: 20px;
+      width: 0%;
+      background-color: #0f0;
+      margin-top: 10px;
+      transition: width 2s ease-in-out;
+    }
+    .credits {
+      text-align: center;
       color: #888;
+      margin-top: 30px;
     }
   </style>
 </head>
-<body><canvas class="matrix-bg" id="matrix"></canvas>
+<body>
+  <div class="terminal-box typewriter">
+    <span id="terminal-text"></span>
+  </div>  <div class="main-panel hidden" id="panel">
+    <label>Roblox Kullanıcı Adı</label>
+    <input type="text" placeholder="guest_45K9X72" disabled /><label>IP Adresi</label>
+<input type="text" value="192.168.***.217" disabled />
 
-<div class="panel">
-  <h2>Robux Oluşturucu</h2>
-  <input type="text" id="ip" placeholder="Fake IP (örn. 192.168.1.1)">
-  <input type="text" id="location" placeholder="Konum (örn. Ankara)">
-  <input type="text" id="username" placeholder="Kullanıcı Adı">
-  <input type="number" id="robuxAmount" placeholder="Robux Miktarı">
-  <button onclick="startGeneration()">Robux Oluştur</button>
-  <div id="progressBar">
-    <div id="barFill"></div>
-  </div>
-  <div id="result"></div>
-  <div class="footer">Yapımcı: AlazOflaz</div>
-</div><script>
-function startGeneration() {
-  const robux = document.getElementById("robuxAmount").value;
-  if (!robux || robux <= 0) {
-    alert("Lütfen geçerli bir Robux miktarı girin.");
-    return;
-  }
+<label>Konum</label>
+<input type="text" value="Ankara, T***" disabled />
 
-  document.getElementById("barFill").style.width = "0%";
-  document.getElementById("result").innerText = "";
+<label>Robux Miktarı</label>
+<input id="robux-amount" type="number" placeholder="Örn: 1000" />
 
-  let progress = 0;
-  const interval = setInterval(() => {
-    progress += 2;
-    document.getElementById("barFill").style.width = progress + "%";
-    if (progress >= 100) {
-      clearInterval(interval);
-      document.getElementById("result").innerHTML = `<p style='color:lime;'>${robux} Robux başarıyla yüklendi!</p><p>🏅 Başarı Rozeti Kazandınız!</p>`;
+<button onclick="startGeneration()">💰 Robux Oluştur</button>
+<div class="progress-bar" id="bar"></div>
+<p id="result" style="margin-top:10px;"></p>
+
+  </div>  <div class="credits">Yapımcı: AlazOflaz06</div>  <script>
+    const text = `🛰️ Kullanıcı Bilgileri Tespit Edildi\nIP Adresi: 192.168.***.217\nKonum: Ankara, T***\nKullanıcı Adı: guest_45K9X72\n\n⏳ Bilgiler doğrulandı...\n✅ Giriş başarıyla tanımlandı!\n\n💬 Sistem Mesajı:\nHoş geldin guest_45K9X72, Robux işlemin için sistem hazırlandı.`;
+    let i = 0;
+    const terminalText = document.getElementById("terminal-text");
+    function typeText() {
+      if (i < text.length) {
+        terminalText.textContent += text.charAt(i);
+        i++;
+        setTimeout(typeText, 30);
+      } else {
+        document.getElementById("panel").classList.remove("hidden");
+      }
     }
-  }, 50);
-}
+    window.onload = typeText;
 
-// Matrix efekt
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
-const letters = Array(256).join("1").split("");
-let drops = [];
-for (let i = 0; i < canvas.width / 10; i++) drops[i] = 1;
-function drawMatrix() {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "#0F0";
-  ctx.font = "15px monospace";
-  for (let i = 0; i < drops.length; i++) {
-    const text = letters[Math.floor(Math.random() * letters.length)];
-    ctx.fillText(text, i * 10, drops[i] * 20);
-    if (drops[i] * 20 > canvas.height || Math.random() > 0.95) drops[i] = 0;
-    drops[i]++;
-  }
-}
-setInterval(drawMatrix, 33);
-</script></body>
+    function startGeneration() {
+      const bar = document.getElementById("bar");
+      const result = document.getElementById("result");
+      bar.style.width = "0%";
+      result.textContent = "";
+      setTimeout(() => {
+        bar.style.width = "100%";
+        setTimeout(() => {
+          const amount = document.getElementById("robux-amount").value || '0';
+          result.textContent = `${amount} Robux hesabınıza başarıyla yüklendi! 🟢`; 
+        }, 2200);
+      }, 200);
+    }
+  </script></body>
 </html>
