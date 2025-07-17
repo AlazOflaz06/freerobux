@@ -1,187 +1,112 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html><html lang="tr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Free Robux Generator</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <title>Ücretsiz Robux Generator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: black;
+      background: linear-gradient(to right, #121212, #1e1e1e);
       color: white;
-      overflow-x: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding-bottom: 100px;
     }
-    .matrix {
+    .generator-panel {
+      background-color: #1e1e1e;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,255,0,0.2);
+      max-width: 500px;
+      margin: auto;
+    }
+    .chat-bot {
+      background-color: #2a2a2a;
+      border-radius: 20px;
+      padding: 20px;
+      margin-top: 40px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .message {
+      text-align: left;
+      background-color: #333;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 10px;
+    }
+    .robux-anim {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      background: black;
-      z-index: -1;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
+      z-index: 0;
     }
-    canvas {
-      display: block;
+    .robux {
+      position: absolute;
+      width: 40px;
+      opacity: 0.6;
+      animation: fall 5s infinite;
     }
-    .container {
-      padding: 2rem;
-      text-align: center;
+    @keyframes fall {
+      0% {transform: translateY(-100px) rotate(0deg);}
+      100% {transform: translateY(100vh) rotate(360deg);}
     }
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-    }
-    .generator {
-      background: #111;
-      padding: 2rem;
+    .ip-info, .premium, .register-fake {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #2c2c2c;
       border-radius: 15px;
-      box-shadow: 0 0 10px lime;
-      max-width: 400px;
-      margin: auto;
-    }
-    input, select, button {
-      margin: 10px 0;
-      padding: 10px;
-      width: 100%;
-      border-radius: 5px;
-      border: none;
-      font-size: 1rem;
-    }
-    button {
-      background: lime;
-      color: black;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-    button:hover {
-      background: white;
-    }
-    .dark-mode {
-      background: #fff;
-      color: #111;
-    }
-    .toggle-theme {
-      position: fixed;
-      top: 10px;
-      right: 10px;
-      background: #444;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .social {
-      margin-top: 2rem;
-    }
-    .social a {
-      color: lime;
-      margin: 0 10px;
-      font-size: 1.5rem;
-      transition: 0.3s;
-    }
-    .social a:hover {
-      color: white;
-    }
-    .chatbot {
-      position: fixed;
-      bottom: 10px;
-      right: 10px;
-      background: #333;
-      padding: 1rem;
-      border-radius: 10px;
-      display: none;
-    }
-    .active-count {
-      margin-top: 1rem;
-      color: #0f0;
-      font-weight: bold;
-    }
-    .footer {
-      margin-top: 2rem;
-      font-size: 1.2rem;
-      text-align: center;
-      font-weight: bold;
-      font-family: monospace;
-      color: #ff69b4;
-      text-shadow: 0 0 10px #f0f;
     }
   </style>
 </head>
 <body>
-  <canvas class="matrix"></canvas>  <div class="toggle-theme" onclick="toggleTheme()">🌗 Tema</div>  <div class="container">
-    <h1>Free Robux Generator</h1>
-    <div class="generator">
-      <input type="text" placeholder="Kullanıcı Adı" id="username" />
-      <select id="amount">
-        <option>100 Robux</option>
-        <option>500 Robux</option>
-        <option>1000 Robux</option>
-        <option>10.000 Robux</option>
-      </select>
-      <button onclick="generateRobux()">Robux Oluştur</button>
-      <div class="active-count">Şu an 174 kişi aktif</div>
-    </div>
-    <div class="social">
-      <a href="#"><i class="fab fa-twitter"></i></a>
-      <a href="#"><i class="fab fa-whatsapp"></i></a>
-      <a href="#"><i class="fab fa-instagram"></i></a>
-    </div>
-  </div>  <div class="chatbot" id="chatbot">
-    <p>Yardımcı olmamı ister misin?</p>
-  </div>  <div class="footer">YAPIMCI: <span style="font-size: 2rem; color: lime;">ALAZ OFLAZ</span></div>  <script>
-    // Matrix effect
-    const canvas = document.querySelector(".matrix");
-    const ctx = canvas.getContext("2d");
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
-
-    const letters = "01";
-    const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = Array.from({ length: columns }).fill(1);
-
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#0f0";
-      ctx.font = `${fontSize}px monospace`;
-      drops.forEach((y, i) => {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        const x = i * fontSize;
-        ctx.fillText(text, x, y * fontSize);
-        if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-      });
-    }
-    setInterval(draw, 33);
-
-    // Generator
-    function generateRobux() {
-      const username = document.getElementById('username').value;
-      const amount = document.getElementById('amount').value;
-      if (!username) return alert("Kullanıcı adı gerekli!");
-      alert(`@${username} için ${amount} yükleniyor...`);
-      setTimeout(() => {
-        const messages = [
-          "Bağlantı kuruldu...",
-          "Sunucu yanıt bekleniyor...",
-          "Güvenlik doğrulaması tamamlandı...",
-          "İşlem başarıyla tamamlandı!"
-        ];
-        alert(messages[Math.floor(Math.random() * messages.length)]);
-      }, 2000);
+  <div class="generator-panel">
+    <h2>Robux Generator</h2>
+    <p>Roblox kullanıcı adını gir ve Robux miktarını seç</p>
+    <input type="text" class="form-control mb-2" placeholder="Kullanıcı Adı">
+    <select class="form-control mb-3">
+      <option>100 Robux</option>
+      <option>500 Robux</option>
+      <option>1000 Robux</option>
+    </select>
+    <button class="btn btn-success w-100" onclick="startProcess()">Başlat</button>
+  </div>  <div class="ip-info">
+    <h5>IP: 88.123.67.89</h5>
+    <h5>Konum: Ankara, TR</h5>
+  </div>  <div class="premium">
+    <h5>Premium Kullanıcı Mısın?</h5>
+    <p>Hızlı Robux için Premium’a geç!</p>
+    <button class="btn btn-outline-warning btn-sm">Premium Yükselt</button>
+  </div>  <div class="register-fake">
+    <h5>Kayıt Ol</h5>
+    <input type="text" class="form-control mb-2" placeholder="E-posta">
+    <input type="password" class="form-control mb-2" placeholder="Şifre">
+    <button class="btn btn-primary w-100">Kayıt Ol</button>
+  </div>  <div class="chat-bot">
+    <h5>Yardımcı Asistan</h5>
+    <div class="message">🤖 Merhaba! Robux yüklemenize yardımcı olacağım.</div>
+    <div class="message">💬 İşlem başlatıldı, lütfen bekleyin...</div>
+  </div>  <div class="robux-anim" id="robuxRain"></div>  <script>
+    function startProcess() {
+      alert("Bağlanılıyor... Sunucu işleniyor...");
     }
 
-    // Tema değiştir
-    function toggleTheme() {
-      document.body.classList.toggle("dark-mode");
+    function createRobuxRain() {
+      const container = document.getElementById("robuxRain");
+      for (let i = 0; i < 30; i++) {
+        const img = document.createElement("img");
+        img.src = "https://seeklogo.com/images/R/robux-logo-3C0E8D6E67-seeklogo.com.png";
+        img.className = "robux";
+        img.style.left = Math.random() * 100 + "vw";
+        img.style.animationDelay = Math.random() * 5 + "s";
+        img.style.top = "-100px";
+        container.appendChild(img);
+      }
     }
-
-    // Chatbot simülasyonu
-    setTimeout(() => {
-      document.getElementById("chatbot").style.display = "block";
-    }, 6000);
+    createRobuxRain();
   </script></body>
 </html>
