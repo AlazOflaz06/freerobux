@@ -5,14 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Roblox Robux Generator</title>
 <style>
-  /* Genel reset */
+  /* Genel reset ve full height */
   * {
     margin: 0; padding: 0; box-sizing: border-box;
   }
-  body {
-    font-family: 'Courier New', monospace;
+  html, body {
+    height: 100%;
     background: black;
     color: #00ff99;
+    font-family: 'Courier New', monospace;
     overflow-x: hidden;
   }
   canvas#matrix {
@@ -22,13 +23,15 @@
   }
   .container {
     max-width: 400px;
-    margin: 60px auto 80px;
+    width: 90%;
+    margin: 40px auto 80px;
     background: rgba(0,255,153,0.1);
     border: 2px solid #00ff99;
     border-radius: 15px;
     padding: 30px 20px;
     box-shadow: 0 0 20px #00ff99;
     text-align: center;
+    box-sizing: border-box;
   }
   h1 {
     font-size: 36px;
@@ -155,6 +158,25 @@
         0 0 50px #ff4500;
     }
   }
+
+  /* Responsive mobil düzenlemeler */
+  @media (max-width: 480px) {
+    .container {
+      margin: 20px auto 60px;
+      padding: 20px 15px;
+    }
+    h1 {
+      font-size: 28px;
+    }
+    button {
+      font-size: 18px;
+      padding: 12px 0;
+    }
+    input[type="text"], input[type="number"] {
+      font-size: 16px;
+      padding: 10px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -184,6 +206,7 @@
 <div id="footer">YAPIMCI: ALAZ OFLAZ</div>
 
 <script>
+  // Matrix effect
   const canvas = document.getElementById('matrix');
   const ctx = canvas.getContext('2d');
   let W, H;
@@ -194,7 +217,12 @@
     canvas.height = H;
   }
   resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    // matrix drops da güncellenmeli
+    columns = Math.floor(W / fontSize);
+    drops = new Array(columns).fill(1);
+  });
 
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   const fontSize = 14;
@@ -220,6 +248,7 @@
   }
   setInterval(draw, 35);
 
+  // Üretim simülasyonu
   const generateBtn = document.getElementById('generateBtn');
   const loader = document.querySelector('.loader');
   const bar = document.getElementById('bar');
