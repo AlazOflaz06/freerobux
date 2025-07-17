@@ -1,132 +1,129 @@
 <!DOCTYPE html><html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Robux Generator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Robux Generator</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #000;
-      color: #0f0;
+      padding: 0;
+      background-color: black;
+      color: #00ff00;
+      font-family: monospace;
       overflow-x: hidden;
     }
-    .terminal-box {
-      background: #111;
-      padding: 20px;
-      border: 2px solid #0f0;
-      width: 90%;
-      max-width: 600px;
-      margin: 50px auto;
-      border-radius: 8px;
-      box-shadow: 0 0 15px #0f0;
-      white-space: pre-line;
-    }
-    .hidden {
-      display: none;
-    }
-    .typewriter span {
-      display: inline-block;
-      border-right: 2px solid #0f0;
-      white-space: nowrap;
-      overflow: hidden;
-      animation: typing 3s steps(40, end), blink 0.75s step-end infinite;
-    }
-    @keyframes typing {
-      from {
-        width: 0;
-      }
-      to {
-        width: 100%;
-      }
-    }
-    @keyframes blink {
-      from, to {
-        border-color: transparent;
-      }
-      50% {
-        border-color: #0f0;
-      }
-    }
-    .main-panel {
-      background-color: #111;
-      padding: 20px;
-      width: 90%;
-      max-width: 700px;
-      margin: 20px auto;
-      border: 2px solid #0f0;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #0f0;
-    }
-    .main-panel input, .main-panel button {
-      display: block;
+    .matrix {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      margin: 10px 0;
+      height: 100%;
+      z-index: -1;
+      background: black;
+      animation: backgroundMatrix 10s linear infinite;
+    }
+    @keyframes backgroundMatrix {
+      0% {background-position: 0 0;}
+      100% {background-position: 0 1000px;}
+    }
+    .panel {
+      max-width: 500px;
+      margin: 50px auto;
+      background: rgba(0,0,0,0.9);
+      border: 2px solid #00ff00;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #00ff00;
+    }
+    .fake-info {
+      background: #111;
       padding: 10px;
-      background-color: #000;
-      color: #0f0;
-      border: 1px solid #0f0;
-      border-radius: 4px;
+      border-radius: 10px;
+      margin-bottom: 15px;
     }
     .progress-bar {
-      height: 20px;
-      width: 0%;
-      background-color: #0f0;
+      width: 100%;
+      background: #222;
+      border: 1px solid #00ff00;
+      height: 25px;
+      border-radius: 5px;
+      overflow: hidden;
       margin-top: 10px;
-      transition: width 2s ease-in-out;
     }
-    .credits {
-      text-align: center;
-      color: #888;
+    .progress {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, lime, green);
+      animation: loadProgress 5s linear forwards;
+    }
+    @keyframes loadProgress {
+      from {width: 0%;}
+      to {width: 100%;}
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: none;
+      font-size: 16px;
+    }
+    button {
+      background: #00ff00;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    #success {
+      margin-top: 20px;
+      font-size: 18px;
+      color: lime;
+    }
+    .footer {
       margin-top: 30px;
+      font-size: 14px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div class="terminal-box typewriter">
-    <span id="terminal-text"></span>
-  </div>  <div class="main-panel hidden" id="panel">
-    <label>Roblox Kullanıcı Adı</label>
-    <input type="text" placeholder="guest_45K9X72" disabled /><label>IP Adresi</label>
-<input type="text" value="192.168.***.217" disabled />
-
-<label>Konum</label>
-<input type="text" value="Ankara, T***" disabled />
-
-<label>Robux Miktarı</label>
-<input id="robux-amount" type="number" placeholder="Örn: 1000" />
-
-<button onclick="startGeneration()">💰 Robux Oluştur</button>
-<div class="progress-bar" id="bar"></div>
-<p id="result" style="margin-top:10px;"></p>
-
-  </div>  <div class="credits">Yapımcı: AlazOflaz06</div>  <script>
-    const text = `🛰️ Kullanıcı Bilgileri Tespit Edildi\nIP Adresi: 192.168.***.217\nKonum: Ankara, T***\nKullanıcı Adı: guest_45K9X72\n\n⏳ Bilgiler doğrulandı...\n✅ Giriş başarıyla tanımlandı!\n\n💬 Sistem Mesajı:\nHoş geldin guest_45K9X72, Robux işlemin için sistem hazırlandı.`;
-    let i = 0;
-    const terminalText = document.getElementById("terminal-text");
-    function typeText() {
-      if (i < text.length) {
-        terminalText.textContent += text.charAt(i);
-        i++;
-        setTimeout(typeText, 30);
-      } else {
-        document.getElementById("panel").classList.remove("hidden");
-      }
-    }
-    window.onload = typeText;
-
-    function startGeneration() {
+  <div class="matrix"></div>
+  <div class="panel">
+    <div class="fake-info">
+      <p>🌐 IP Adresi: 192.168.1.***</p>
+      <p>📍 Konum: ****, Türkiye</p>
+      <p>👤 Kullanıcı: roblox_user***</p>
+    </div>
+    <p><strong>Kullanıcı bilgileri tespit edildi.</strong></p>
+    <input type="text" id="username" placeholder="Roblox Kullanıcı Adı">
+    <input type="number" id="amount" placeholder="Robux Miktarı">
+    <button onclick="generate()">Robux Üret</button>
+    <div class="progress-bar" id="bar" style="display:none;">
+      <div class="progress" id="progress"></div>
+    </div>
+    <div id="success"></div>
+    <div class="footer">
+      <p>Yapımcı: AlazOflaz</p>
+    </div>
+  </div>
+  <script>
+    function generate() {
+      const user = document.getElementById("username").value;
+      const amount = document.getElementById("amount").value;
       const bar = document.getElementById("bar");
-      const result = document.getElementById("result");
-      bar.style.width = "0%";
-      result.textContent = "";
-      setTimeout(() => {
-        bar.style.width = "100%";
-        setTimeout(() => {
-          const amount = document.getElementById("robux-amount").value || '0';
-          result.textContent = `${amount} Robux hesabınıza başarıyla yüklendi! 🟢`; 
-        }, 2200);
-      }, 200);
-    }
-  </script></body>
+      const success = document.getElementById("success");if (!user || !amount) {
+    alert("Lütfen kullanıcı adı ve robux miktarını girin.");
+    return;
+  }
+
+  bar.style.display = 'block';
+  success.innerHTML = "";
+
+  setTimeout(() => {
+    success.innerHTML = `✅ <strong>${user}</strong> isimli hesabınıza <strong>${amount}</strong> Robux gönderildi.`;
+  }, 5200);
+}
+
+  </script>
+</body>
 </html>
