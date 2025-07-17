@@ -1,112 +1,179 @@
-<!DOCTYPE html><html lang="tr">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ücretsiz Robux Generator</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <title>Free Robux Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      background: linear-gradient(to right, #121212, #1e1e1e);
-      color: white;
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding-bottom: 100px;
-    }
-    .generator-panel {
-      background-color: #1e1e1e;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(0,255,0,0.2);
-      max-width: 500px;
-      margin: auto;
-    }
-    .chat-bot {
-      background-color: #2a2a2a;
-      border-radius: 20px;
-      padding: 20px;
-      margin-top: 40px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .message {
-      text-align: left;
-      background-color: #333;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 10px;
-    }
-    .robux-anim {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .robux {
-      position: absolute;
-      width: 40px;
-      opacity: 0.6;
-      animation: fall 5s infinite;
-    }
-    @keyframes fall {
-      0% {transform: translateY(-100px) rotate(0deg);}
-      100% {transform: translateY(100vh) rotate(360deg);}
-    }
-    .ip-info, .premium, .register-fake {
-      margin-top: 30px;
-      padding: 20px;
-      background-color: #2c2c2c;
-      border-radius: 15px;
-    }
+      margin: 0;
+      font-family: 'Rubik', sans-serif;
+      background: black;
+      color: #00ff00;
+      overflow-x: hidden;
+    }.matrix {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  z-index: -1;
+  overflow: hidden;
+}
+
+canvas {
+  display: block;
+}
+
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #0f0;
+  margin-bottom: 1rem;
+}
+
+.generator-panel {
+  background: #111;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #0f0;
+}
+
+.generator-panel input, .generator-panel select, .generator-panel button {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: none;
+}
+
+.generator-panel button {
+  background: #0f0;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.generator-panel button:hover {
+  background: #0c0;
+}
+
+.loading-bar {
+  margin-top: 1rem;
+  width: 100%;
+  height: 20px;
+  background: #333;
+  border-radius: 10px;
+  overflow: hidden;
+  display: none;
+}
+
+.loading-bar-inner {
+  width: 0%;
+  height: 100%;
+  background: lime;
+  animation: loading 5s linear forwards;
+}
+
+@keyframes loading {
+  to {
+    width: 100%;
+  }
+}
+
+.info {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #0f0;
+}
+
+.footer {
+  margin-top: 3rem;
+  font-family: monospace;
+  font-size: 1.5rem;
+  color: #0ff;
+  text-align: center;
+}
+
+.location {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
   </style>
 </head>
 <body>
-  <div class="generator-panel">
-    <h2>Robux Generator</h2>
-    <p>Roblox kullanıcı adını gir ve Robux miktarını seç</p>
-    <input type="text" class="form-control mb-2" placeholder="Kullanıcı Adı">
-    <select class="form-control mb-3">
-      <option>100 Robux</option>
-      <option>500 Robux</option>
-      <option>1000 Robux</option>
-    </select>
-    <button class="btn btn-success w-100" onclick="startProcess()">Başlat</button>
-  </div>  <div class="ip-info">
-    <h5>IP: 88.123.67.89</h5>
-    <h5>Konum: Ankara, TR</h5>
-  </div>  <div class="premium">
-    <h5>Premium Kullanıcı Mısın?</h5>
-    <p>Hızlı Robux için Premium’a geç!</p>
-    <button class="btn btn-outline-warning btn-sm">Premium Yükselt</button>
-  </div>  <div class="register-fake">
-    <h5>Kayıt Ol</h5>
-    <input type="text" class="form-control mb-2" placeholder="E-posta">
-    <input type="password" class="form-control mb-2" placeholder="Şifre">
-    <button class="btn btn-primary w-100">Kayıt Ol</button>
-  </div>  <div class="chat-bot">
-    <h5>Yardımcı Asistan</h5>
-    <div class="message">🤖 Merhaba! Robux yüklemenize yardımcı olacağım.</div>
-    <div class="message">💬 İşlem başlatıldı, lütfen bekleyin...</div>
-  </div>  <div class="robux-anim" id="robuxRain"></div>  <script>
-    function startProcess() {
-      alert("Bağlanılıyor... Sunucu işleniyor...");
-    }
+  <div class="matrix">
+    <canvas id="matrix"></canvas>
+  </div>  <div class="container">
+    <div class="title">Free Robux Generator</div><div class="generator-panel">
+  <input type="text" placeholder="Kullanıcı Adı" />
+  <select>
+    <option>Android</option>
+    <option>iOS</option>
+    <option>Windows</option>
+  </select>
+  <input type="number" placeholder="Robux Miktarı" />
+  <button onclick="startLoading()">Robux Üret</button>
 
-    function createRobuxRain() {
-      const container = document.getElementById("robuxRain");
-      for (let i = 0; i < 30; i++) {
-        const img = document.createElement("img");
-        img.src = "https://seeklogo.com/images/R/robux-logo-3C0E8D6E67-seeklogo.com.png";
-        img.className = "robux";
-        img.style.left = Math.random() * 100 + "vw";
-        img.style.animationDelay = Math.random() * 5 + "s";
-        img.style.top = "-100px";
-        container.appendChild(img);
+  <div class="loading-bar" id="loadingBar">
+    <div class="loading-bar-inner"></div>
+  </div>
+</div>
+
+<div class="location">Konum: Ankara | IP: 192.168.1.217</div>
+
+<div class="info">
+  Premium Hesap Aktif | Robux Paketiniz hazırlanıyor...<br>
+  Yarı saydam Robux animasyonu yükleniyor...
+</div>
+
+<div class="footer">YAPIMCI: <span style="font-family: 'Courier New', monospace; font-size: 2rem; color: #ff0;">ALAZ OFLAZ</span></div>
+
+  </div>  <script>
+    // Matrix efekti
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letters = "01";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array.from({ length: columns }, () => 1);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#0F0";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
       }
     }
-    createRobuxRain();
+
+    setInterval(draw, 33);
+
+    function startLoading() {
+      const bar = document.getElementById("loadingBar");
+      bar.style.display = "block";
+    }
   </script></body>
 </html>
