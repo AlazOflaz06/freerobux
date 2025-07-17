@@ -1,156 +1,117 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Free Robux Generator</title>
   <style>
     body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: black;
-      color: #00ff00;
-      overflow-x: hidden;
-      text-align: center;
-      padding: 2rem 1rem;
-    }
-    .container {
-      max-width: 500px;
-      margin: 0 auto;
+      font-family: Arial, sans-serif;
       background: #111;
-      padding: 1.5rem;
-      border-radius: 10px;
-      box-shadow: 0 0 15px #0f0;
+      color: #fff;
+      text-align: center;
+      padding: 40px;
     }
-    input, select, button {
-      width: 100%;
-      margin: 0.5rem 0;
-      padding: 0.75rem;
-      font-size: 1rem;
-      border-radius: 5px;
+
+    input, button {
+      padding: 12px;
+      font-size: 18px;
+      margin: 10px;
+      border-radius: 8px;
       border: none;
-      background: #222;
-      color: #0f0;
     }
+
+    input {
+      width: 200px;
+    }
+
     button {
-      background: #0f0;
-      color: black;
-      font-weight: bold;
+      background-color: #00cc00;
+      color: #fff;
       cursor: pointer;
       transition: background 0.3s;
     }
+
     button:hover {
-      background: #0c0;
+      background-color: #009900;
     }
-    .loading-bar {
-      margin-top: 1rem;
+
+    #progressBar {
       width: 100%;
-      height: 20px;
-      background: #333;
+      background: #444;
+      margin-top: 30px;
+      height: 25px;
       border-radius: 10px;
       overflow: hidden;
       display: none;
     }
-    .loading-bar-inner {
-      width: 0%;
+
+    #barFill {
       height: 100%;
-      background: lime;
-      animation: loading 5s linear forwards;
+      width: 0%;
+      background: #00ff00;
+      transition: width 0.3s;
     }
-    @keyframes loading {
-      to { width: 100%; }
-    }
-    .location {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-    }
-    .footer {
-      margin-top: 3rem;
-      font-family: monospace;
-      font-size: 1.5rem;
-      color: #0ff;
-    }
-    .selected-platform {
-      margin-top: 0.5rem;
-      font-weight: bold;
-      font-size: 1.1rem;
-      color: #ff0;
-    }
-    .badge {
-      margin-top: 1rem;
-      padding: 10px;
-      background-color: #0f0;
-      color: black;
-      font-weight: bold;
-      border-radius: 8px;
+
+    #result-box {
       display: none;
-      user-select: none;
-      font-size: 1.2rem;
+      margin-top: 30px;
+      font-size: 20px;
+    }
+
+    .badge {
+      margin-top: 10px;
+      font-size: 22px;
+      color: gold;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Free Robux Generator</h1>
-    <input type="text" placeholder="Kullanıcı Adı" />
-    <select id="platformSelect" onchange="updatePlatform()">
-      <option value="Android">Android</option>
-      <option value="iOS">iOS</option>
-      <option value="Windows">Windows</option>
-      <option value="Xbox">Xbox</option>
-      <option value="Mac">Mac</option>
-      <option value="Web">Web</option>
-    </select>
-    <div class="selected-platform" id="selectedPlatformText">Seçilen platform: Android</div>
-    <input type="number" placeholder="Robux Miktarı" />
-    <button onclick="startLoading()">Robux Üret</button>
 
-    <div class="loading-bar" id="loadingBar">
-      <div class="loading-bar-inner"></div>
-    </div>
+  <h1>💰 Ücretsiz Robux Üretici 💰</h1>
 
-    <div class="location">Konum: Ankara | IP: 185.216.123.54</div>
+  <input type="number" id="robuxAmount" placeholder="Robux miktarı gir">
+  <br>
+  <button onclick="startGeneration()">Robux Üret</button>
 
-    <div class="badge" id="successBadge">🏅 Tebrikler! Başarı rozeti kazandınız!</div>
+  <div id="progressBar">
+    <div id="barFill"></div>
+  </div>
 
-    <div class="footer">YAPIMCI: <span style="font-family: 'Courier New', monospace; font-size: 2rem; color: #ff0;">ALAZ OFLAZ</span></div>
+  <div id="result-box">
+    <p id="addedAmount"></p>
+    <p class="badge">🏅 Başarı Rozeti Kazandınız!</p>
   </div>
 
   <script>
-    // Platform seçimi metnini güncelle
-    function updatePlatform() {
-      const select = document.getElementById('platformSelect');
-      const text = document.getElementById('selectedPlatformText');
-      text.textContent = 'Seçilen platform: ' + select.value;
+    function startGeneration() {
+      const robuxAmount = document.getElementById("robuxAmount").value;
+      if (!robuxAmount || robuxAmount <= 0) {
+        alert("Lütfen geçerli bir Robux miktarı girin.");
+        return;
+      }
+
+      document.getElementById("progressBar").style.display = "block";
+      document.getElementById("barFill").style.width = "0%";
+      document.getElementById("result-box").style.display = "none";
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 2;
+        document.getElementById("barFill").style.width = progress + "%";
+        if (progress >= 100) {
+          clearInterval(interval);
+          showResult(robuxAmount);
+        }
+      }, 50);
     }
 
-    function startLoading() {
-      const bar = document.getElementById("loadingBar");
-      const innerBar = bar.querySelector(".loading-bar-inner");
-      const badge = document.getElementById("successBadge");
-
-      // Rozeti gizle
-      badge.style.display = "none";
-
-      bar.style.display = "block";
-      innerBar.style.width = "0%";
-
-      innerBar.style.animation = "none";
-      innerBar.offsetHeight; // reflow
-      innerBar.style.animation = null;
-
-      setTimeout(() => {
-        innerBar.style.width = "100%";
-      }, 10);
-
-      setTimeout(() => {
-        bar.style.display = "none";
-        badge.style.display = "block";
-      }, 5100);
+    function showResult(amount) {
+      document.getElementById("result-box").style.display = "block";
+      document.getElementById("addedAmount").innerText =
+        `${amount} Robux hesabınıza başarıyla eklendi ✅`;
     }
-
-    // Sayfa yüklendiğinde platform metnini başlat
-    window.onload = updatePlatform;
   </script>
+
 </body>
 </html>
