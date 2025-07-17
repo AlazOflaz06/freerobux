@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Roblox Robux Generator</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      color: #00ff99;
+    }
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      background: black;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      font-size: 40px;
+      color: #00ffcc;
+      text-shadow: 0 0 15px #00ffcc;
+      margin-bottom: 30px;
+    }
+    input, button {
+      padding: 12px;
+      margin: 10px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+    }
+    input {
+      width: 250px;
+      text-align: center;
+    }
+    button {
+      background-color: #00ff00;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #00cc00;
+    }
+    .loader {
+      display: none;
+      margin-top: 30px;
+    }
+    .progress {
+      width: 300px;
+      height: 25px;
+      background: #222;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: #00ff00;
+      transition: width 0.3s linear;
+    }
+    #result {
+      font-size: 22px;
+      margin-top: 30px;
+      color: #00ffcc;
+      text-shadow: 0 0 10px #00ffcc;
+    }
+    #footer {
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      color: #00ffaa;
+      font-size: 18px;
+      text-shadow: 0 0 10px #00ffaa, 0 0 20px #00ffaa;
+      pointer-events: none;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div class="container">
+    <h1>ROBLOX ROBUX GENERATOR</h1>
+    <input type="text" id="username" placeholder="Kullanıcı adını gir">
+    <input type="number" id="amount" placeholder="Robux miktarı">
+    <button onclick="generate()">ÜRET</button>
+    <div class="loader">
+      <div class="progress"><div class="bar" id="bar"></div></div>
+    </div>
+    <div id="result"></div>
+  </div>
+  <div id="footer">Yapımcı: Alaz Oflaz</div>
+
+  <script>
+    // Matrix animasyonu
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+
+    for (let x = 0; x < columns; x++) drops[x] = 1;
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#0f0";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters.charAt(Math.floor(Math.random() * letters.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 35);
+
+    // Üretim simülasyonu
+    function generate() {
+      const user = document.getElementById("username").value;
+      const amount = document.getElementById("amount").value;
+      const loader = document.querySelector(".loader");
+      const bar = document.getElementById("bar");
+      const result = document.getElementById("result");
+
+      if (!user || !amount) {
+        alert("Lütfen tüm alanları doldur.");
+        return;
+      }
+
+      result.innerHTML = "";
+      bar.style.width = "0%";
+      loader.style.display = "block";
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += Math.random() * 5;
+        if (progress >= 100) {
+          progress = 100;
+          clearInterval(interval);
+          loader.style.display = "none";
+          result.innerHTML = `✅ ${user} kullanıcısına ${amount} R$ başarıyla gönderildi.`;
+        }
+        bar.style.width = `${progress}%`;
+      }, 150);
+    }
+  </script>
+</body>
+</html>
