@@ -5,38 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Roblox Robux Generator</title>
 <style>
-  /* Genel Reset & Body */
+  /* Genel reset */
   * {
     margin: 0; padding: 0; box-sizing: border-box;
   }
   body {
     font-family: 'Courier New', monospace;
-    overflow-x: hidden;
     background: black;
     color: #00ff99;
+    overflow-x: hidden;
   }
-
-  /* Matrix arka plan */
   canvas#matrix {
-    position: fixed;
-    top: 0; left: 0;
+    position: fixed; top: 0; left: 0;
     width: 100%; height: 100%;
     z-index: -1;
   }
-
-  /* Konteyner */
   .container {
     max-width: 400px;
     margin: 60px auto 80px;
-    background: rgba(0, 255, 153, 0.1);
+    background: rgba(0,255,153,0.1);
     border: 2px solid #00ff99;
     border-radius: 15px;
     padding: 30px 20px;
     box-shadow: 0 0 20px #00ff99;
     text-align: center;
   }
-
-  /* Başlık */
   h1 {
     font-size: 36px;
     margin-bottom: 25px;
@@ -44,17 +37,11 @@
     text-shadow: 0 0 15px #00ffcc;
     user-select: none;
   }
-
-  /* Logo */
-  .logo {
-    margin-bottom: 20px;
-    user-select: none;
-  }
   .logo img {
     width: 120px;
+    user-select: none;
+    margin-bottom: 20px;
   }
-
-  /* Inputlar */
   input[type="text"], input[type="number"] {
     width: 90%;
     padding: 12px;
@@ -72,8 +59,6 @@
   input[type="text"]:focus, input[type="number"]:focus {
     box-shadow: 0 0 15px #00ffaa inset;
   }
-
-  /* Buton */
   button {
     cursor: pointer;
     background-color: #00ff00;
@@ -92,8 +77,6 @@
     background-color: #00cc00;
     box-shadow: 0 0 25px #00cc00;
   }
-
-  /* Loader ve progress bar */
   .loader {
     margin-top: 30px;
     display: none;
@@ -108,11 +91,9 @@
   .bar {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00);
+    background: linear-gradient(90deg, #ff0000, #ff7700, #ffff00, #77ff00, #00ff00);
     transition: width 0.2s linear;
   }
-
-  /* Sonuç mesajı */
   #result {
     margin-top: 30px;
     font-size: 22px;
@@ -121,78 +102,58 @@
     min-height: 50px;
     user-select: none;
   }
-
-  /* Footer */
+  /* Lolcat footer */
   #footer {
     position: fixed;
-    bottom: 10px;
+    bottom: 20px;
     width: 100%;
     text-align: center;
-    color: #00ffaa;
-    font-size: 24px;
-    font-weight: bold;
-    text-shadow: 0 0 15px #00ffaa, 0 0 30px #00ffaa;
+    font-size: 32px;
+    font-weight: 900;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
     pointer-events: none;
     user-select: none;
-    animation: glow 2.5s ease-in-out infinite;
-    border-bottom: 2px solid #00ffaa;
-    padding-bottom: 6px;
-    letter-spacing: 1.2px;
+    animation: lolcatGlow 3s infinite;
+    letter-spacing: 3px;
+    text-transform: uppercase;
   }
-  @keyframes glow {
+  @keyframes lolcatGlow {
     0%, 100% {
-      text-shadow: 0 0 15px #00ffaa, 0 0 30px #00ffaa;
+      color: #ff00cc;
+      text-shadow:
+        0 0 10px #ff00cc,
+        0 0 20px #ff69b4,
+        0 0 30px #ff1493,
+        0 0 40px #ff69b4,
+        0 0 50px #ff00cc;
+    }
+    25% {
+      color: #00ffff;
+      text-shadow:
+        0 0 10px #00ffff,
+        0 0 20px #7fffd4,
+        0 0 30px #40e0d0,
+        0 0 40px #7fffd4,
+        0 0 50px #00ffff;
     }
     50% {
-      text-shadow: 0 0 25px #00ffaa, 0 0 50px #00ffaa;
+      color: #ffff00;
+      text-shadow:
+        0 0 10px #ffff00,
+        0 0 20px #ffd700,
+        0 0 30px #ffa500,
+        0 0 40px #ffd700,
+        0 0 50px #ffff00;
     }
-  }
-
-  /* Sosyal paylaşım butonları */
-  .share-buttons {
-    margin-top: 25px;
-  }
-  .share-buttons button {
-    width: auto;
-    padding: 10px 14px;
-    margin: 0 5px;
-    font-size: 18px;
-    border-radius: 8px;
-    box-shadow: 0 0 8px #00ff99;
-    background: #000;
-    color: #00ff99;
-    border: 2px solid #00ff99;
-    transition: 0.3s;
-  }
-  .share-buttons button:hover {
-    background: #00ff99;
-    color: #000;
-    box-shadow: 0 0 15px #00ff99;
-  }
-
-  /* Fake captcha kutusu */
-  #captcha-box {
-    margin: 20px auto 10px;
-    width: 80%;
-    background: #111;
-    border: 2px solid #00ff99;
-    border-radius: 10px;
-    padding: 15px;
-    user-select: none;
-  }
-  #captcha-question {
-    font-size: 18px;
-    margin-bottom: 10px;
-  }
-  #captcha-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 18px;
-    border-radius: 8px;
-    border: none;
-    background: #000;
-    color: #00ff99;
-    box-shadow: 0 0 8px #00ff99 inset;
+    75% {
+      color: #ff4500;
+      text-shadow:
+        0 0 10px #ff4500,
+        0 0 20px #ff6347,
+        0 0 30px #ff7f50,
+        0 0 40px #ff6347,
+        0 0 50px #ff4500;
+    }
   }
 </style>
 </head>
@@ -211,11 +172,6 @@
 
   <input type="number" id="amount" placeholder="Robux miktarı" autocomplete="off" min="1" />
 
-  <div id="captcha-box">
-    <div id="captcha-question"></div>
-    <input type="text" id="captcha-input" placeholder="Sonucu yaz" autocomplete="off" />
-  </div>
-
   <button id="generateBtn">ÜRET</button>
 
   <div class="loader">
@@ -223,17 +179,11 @@
   </div>
 
   <div id="result"></div>
-
-  <div class="share-buttons" style="display:none;">
-    <button id="share-twitter">Twitter'da Paylaş</button>
-    <button id="share-facebook">Facebook'ta Paylaş</button>
-  </div>
 </div>
 
-<div id="footer">⭐ Yapımcı: Alaz Oflaz</div>
+<div id="footer">YAPIMCI: ALAZ OFLAZ</div>
 
 <script>
-  // Matrix effect
   const canvas = document.getElementById('matrix');
   const ctx = canvas.getContext('2d');
   let W, H;
@@ -248,10 +198,8 @@
 
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   const fontSize = 14;
-  const columns = W / fontSize;
-  const drops = [];
-
-  for(let x = 0; x < columns; x++) drops[x] = 1;
+  let columns = Math.floor(W / fontSize);
+  let drops = new Array(columns).fill(1);
 
   function draw() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
@@ -262,9 +210,9 @@
 
     for(let i = 0; i < drops.length; i++) {
       const text = letters.charAt(Math.floor(Math.random() * letters.length));
-      ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-      if(drops[i]*fontSize > H && Math.random() > 0.975) {
+      if(drops[i] * fontSize > H && Math.random() > 0.975) {
         drops[i] = 0;
       }
       drops[i]++;
@@ -272,61 +220,15 @@
   }
   setInterval(draw, 35);
 
-  // Form & Logic
-  const usernameInput = document.getElementById('username');
-  const amountInput = document.getElementById('amount');
-  const captchaBox = document.getElementById('captcha-box');
-  const captchaQuestion = document.getElementById('captcha-question');
-  const captchaInput = document.getElementById('captcha-input');
   const generateBtn = document.getElementById('generateBtn');
   const loader = document.querySelector('.loader');
   const bar = document.getElementById('bar');
   const result = document.getElementById('result');
-  const shareButtons = document.querySelector('.share-buttons');
 
-  // Captcha işlemi (basit toplama)
-  let captchaAnswer;
-  function generateCaptcha() {
-    const a = Math.floor(Math.random()*10 + 1);
-    const b = Math.floor(Math.random()*10 + 1);
-    captchaAnswer = a + b;
-    captchaQuestion.textContent = `Captcha: ${a} + ${b} = ?`;
-    captchaInput.value = '';
-  }
-  generateCaptcha();
-
-  // LocalStorage geçmiş
-  function saveHistory(username, amount) {
-    let history = JSON.parse(localStorage.getItem('robuxGenHistory')) || [];
-    history.push({username, amount, date: new Date().toLocaleString()});
-    localStorage.setItem('robuxGenHistory', JSON.stringify(history));
-  }
-
-  function loadHistory() {
-    let history = JSON.parse(localStorage.getItem('robuxGenHistory')) || [];
-    return history;
-  }
-
-  // Paylaşım linkleri
-  function shareTwitter(text) {
-    const url = encodeURIComponent(window.location.href);
-    const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${url}`;
-    window.open(shareUrl, '_blank');
-  }
-
-  function shareFacebook(text) {
-    const url = encodeURIComponent(window.location.href);
-    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(text)}`;
-    window.open(shareUrl, '_blank');
-  }
-
-  // Form validasyon ve üretim simülasyonu
   generateBtn.addEventListener('click', () => {
-    const user = usernameInput.value.trim();
-    const amount = amountInput.value.trim();
-    const captchaVal = captchaInput.value.trim();
+    const user = document.getElementById('username').value.trim();
+    const amount = document.getElementById('amount').value.trim();
 
-    // Basit validation
     if(user.length < 3) {
       alert('Kullanıcı adı en az 3 karakter olmalı!');
       return;
@@ -335,29 +237,18 @@
       alert('Lütfen geçerli bir Robux miktarı gir!');
       return;
     }
-    if(captchaVal != captchaAnswer) {
-      alert('Captcha yanlış, tekrar deneyin!');
-      generateCaptcha();
-      return;
-    }
 
-    // Geçmişi kaydet
-    saveHistory(user, amount);
-
-    // Butonu kapat, yükleme başlat
     generateBtn.disabled = true;
     loader.style.display = 'block';
     bar.style.width = '0%';
     result.textContent = '';
 
-    // Loading bar renkler değişecek (kırmızı->sarı->yeşil)
     let progress = 0;
     const colors = ['#ff0000', '#ff7700', '#ffff00', '#77ff00', '#00ff00'];
     const interval = setInterval(() => {
-      progress += Math.random()*7;
+      progress += Math.random() * 7;
       if(progress > 100) progress = 100;
 
-      // Renk değişimi hesaplama
       const colorIndex = Math.floor(progress / 20);
       bar.style.background = colors[colorIndex] || '#00ff00';
       bar.style.width = progress + '%';
@@ -366,4 +257,11 @@
         clearInterval(interval);
         loader.style.display = 'none';
         generateBtn.disabled = false;
-        result.innerHTML = `✅ <
+        result.innerHTML = `✅ ${user} kullanıcısına ${amount} R$ başarıyla gönderildi.`;
+      }
+    }, 150);
+  });
+</script>
+
+</body>
+</html>
