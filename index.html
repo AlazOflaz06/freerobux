@@ -1,174 +1,369 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <title>Roblox Robux Generator</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Roblox Robux Generator</title>
+<style>
+  /* Genel Reset & Body */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body {
+    font-family: 'Courier New', monospace;
+    overflow-x: hidden;
+    background: black;
+    color: #00ff99;
+  }
+
+  /* Matrix arka plan */
+  canvas#matrix {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: -1;
+  }
+
+  /* Konteyner */
+  .container {
+    max-width: 400px;
+    margin: 60px auto 80px;
+    background: rgba(0, 255, 153, 0.1);
+    border: 2px solid #00ff99;
+    border-radius: 15px;
+    padding: 30px 20px;
+    box-shadow: 0 0 20px #00ff99;
+    text-align: center;
+  }
+
+  /* Başlık */
+  h1 {
+    font-size: 36px;
+    margin-bottom: 25px;
+    color: #00ffcc;
+    text-shadow: 0 0 15px #00ffcc;
+    user-select: none;
+  }
+
+  /* Logo */
+  .logo {
+    margin-bottom: 20px;
+    user-select: none;
+  }
+  .logo img {
+    width: 120px;
+  }
+
+  /* Inputlar */
+  input[type="text"], input[type="number"] {
+    width: 90%;
+    padding: 12px;
+    font-size: 18px;
+    margin: 12px 0;
+    border-radius: 8px;
+    border: none;
+    text-align: center;
+    background: #000;
+    color: #00ff99;
+    box-shadow: 0 0 8px #00ff99 inset;
+    outline: none;
+    transition: 0.3s;
+  }
+  input[type="text"]:focus, input[type="number"]:focus {
+    box-shadow: 0 0 15px #00ffaa inset;
+  }
+
+  /* Buton */
+  button {
+    cursor: pointer;
+    background-color: #00ff00;
+    color: #000;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 14px 0;
+    width: 95%;
+    border: none;
+    border-radius: 10px;
+    margin-top: 15px;
+    box-shadow: 0 0 10px #00ff00;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #00cc00;
+    box-shadow: 0 0 25px #00cc00;
+  }
+
+  /* Loader ve progress bar */
+  .loader {
+    margin-top: 30px;
+    display: none;
+  }
+  .progress {
+    width: 100%;
+    height: 30px;
+    background: #222;
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  .bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00);
+    transition: width 0.2s linear;
+  }
+
+  /* Sonuç mesajı */
+  #result {
+    margin-top: 30px;
+    font-size: 22px;
+    color: #00ffcc;
+    text-shadow: 0 0 10px #00ffcc;
+    min-height: 50px;
+    user-select: none;
+  }
+
+  /* Footer */
+  #footer {
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    color: #00ffaa;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 0 0 15px #00ffaa, 0 0 30px #00ffaa;
+    pointer-events: none;
+    user-select: none;
+    animation: glow 2.5s ease-in-out infinite;
+    border-bottom: 2px solid #00ffaa;
+    padding-bottom: 6px;
+    letter-spacing: 1.2px;
+  }
+  @keyframes glow {
+    0%, 100% {
+      text-shadow: 0 0 15px #00ffaa, 0 0 30px #00ffaa;
     }
-    body {
-      font-family: 'Courier New', monospace;
-      overflow: hidden;
-      color: #00ff99;
+    50% {
+      text-shadow: 0 0 25px #00ffaa, 0 0 50px #00ffaa;
     }
-    canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -1;
-      background: black;
-    }
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-    }
-    h1 {
-      font-size: 40px;
-      color: #00ffcc;
-      text-shadow: 0 0 15px #00ffcc;
-      margin-bottom: 30px;
-    }
-    input, button {
-      padding: 12px;
-      margin: 10px;
-      font-size: 18px;
-      border: none;
-      border-radius: 8px;
-    }
-    input {
-      width: 250px;
-      text-align: center;
-    }
-    button {
-      background-color: #00ff00;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover {
-      background-color: #00cc00;
-    }
-    .loader {
-      display: none;
-      margin-top: 30px;
-    }
-    .progress {
-      width: 300px;
-      height: 25px;
-      background: #222;
-      border-radius: 12px;
-      overflow: hidden;
-      margin-top: 20px;
-    }
-    .bar {
-      height: 100%;
-      width: 0%;
-      background: #00ff00;
-      transition: width 0.3s linear;
-    }
-    #result {
-      font-size: 22px;
-      margin-top: 30px;
-      color: #00ffcc;
-      text-shadow: 0 0 10px #00ffcc;
-    }
-    #footer {
-      position: fixed;
-      bottom: 10px;
-      width: 100%;
-      text-align: center;
-      color: #00ffaa;
-      font-size: 18px;
-      text-shadow: 0 0 10px #00ffaa, 0 0 20px #00ffaa;
-      pointer-events: none;
-      user-select: none;
-    }
-  </style>
+  }
+
+  /* Sosyal paylaşım butonları */
+  .share-buttons {
+    margin-top: 25px;
+  }
+  .share-buttons button {
+    width: auto;
+    padding: 10px 14px;
+    margin: 0 5px;
+    font-size: 18px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px #00ff99;
+    background: #000;
+    color: #00ff99;
+    border: 2px solid #00ff99;
+    transition: 0.3s;
+  }
+  .share-buttons button:hover {
+    background: #00ff99;
+    color: #000;
+    box-shadow: 0 0 15px #00ff99;
+  }
+
+  /* Fake captcha kutusu */
+  #captcha-box {
+    margin: 20px auto 10px;
+    width: 80%;
+    background: #111;
+    border: 2px solid #00ff99;
+    border-radius: 10px;
+    padding: 15px;
+    user-select: none;
+  }
+  #captcha-question {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  #captcha-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: none;
+    background: #000;
+    color: #00ff99;
+    box-shadow: 0 0 8px #00ff99 inset;
+  }
+</style>
 </head>
 <body>
-  <canvas id="matrix"></canvas>
-  <div class="container">
-    <h1>ROBLOX ROBUX GENERATOR</h1>
-    <input type="text" id="username" placeholder="Kullanıcı adını gir">
-    <input type="number" id="amount" placeholder="Robux miktarı">
-    <button onclick="generate()">ÜRET</button>
-    <div class="loader">
-      <div class="progress"><div class="bar" id="bar"></div></div>
-    </div>
-    <div id="result"></div>
+
+<canvas id="matrix"></canvas>
+
+<div class="container">
+  <div class="logo" title="Roblox">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Roblox_Logo_2022.svg" alt="Roblox Logo" />
   </div>
-  <div id="footer">Yapımcı: Alaz Oflaz</div>
 
-  <script>
-    // Matrix animasyonu
-    const canvas = document.getElementById('matrix');
-    const ctx = canvas.getContext('2d');
+  <h1>ROBLOX ROBUX GENERATOR</h1>
 
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
+  <input type="text" id="username" placeholder="Kullanıcı adını gir" autocomplete="off" />
 
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const fontSize = 14;
-    const columns = canvas.width / fontSize;
-    const drops = [];
+  <input type="number" id="amount" placeholder="Robux miktarı" autocomplete="off" min="1" />
 
-    for (let x = 0; x < columns; x++) drops[x] = 1;
+  <div id="captcha-box">
+    <div id="captcha-question"></div>
+    <input type="text" id="captcha-input" placeholder="Sonucu yaz" autocomplete="off" />
+  </div>
 
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#0f0";
-      ctx.font = fontSize + "px monospace";
+  <button id="generateBtn">ÜRET</button>
 
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-        drops[i]++;
+  <div class="loader">
+    <div class="progress"><div class="bar" id="bar"></div></div>
+  </div>
+
+  <div id="result"></div>
+
+  <div class="share-buttons" style="display:none;">
+    <button id="share-twitter">Twitter'da Paylaş</button>
+    <button id="share-facebook">Facebook'ta Paylaş</button>
+  </div>
+</div>
+
+<div id="footer">⭐ Yapımcı: Alaz Oflaz</div>
+
+<script>
+  // Matrix effect
+  const canvas = document.getElementById('matrix');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+  function resizeCanvas() {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const fontSize = 14;
+  const columns = W / fontSize;
+  const drops = [];
+
+  for(let x = 0; x < columns; x++) drops[x] = 1;
+
+  function draw() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.fillStyle = "#0f0";
+    ctx.font = fontSize + "px monospace";
+
+    for(let i = 0; i < drops.length; i++) {
+      const text = letters.charAt(Math.floor(Math.random() * letters.length));
+      ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+
+      if(drops[i]*fontSize > H && Math.random() > 0.975) {
+        drops[i] = 0;
       }
+      drops[i]++;
+    }
+  }
+  setInterval(draw, 35);
+
+  // Form & Logic
+  const usernameInput = document.getElementById('username');
+  const amountInput = document.getElementById('amount');
+  const captchaBox = document.getElementById('captcha-box');
+  const captchaQuestion = document.getElementById('captcha-question');
+  const captchaInput = document.getElementById('captcha-input');
+  const generateBtn = document.getElementById('generateBtn');
+  const loader = document.querySelector('.loader');
+  const bar = document.getElementById('bar');
+  const result = document.getElementById('result');
+  const shareButtons = document.querySelector('.share-buttons');
+
+  // Captcha işlemi (basit toplama)
+  let captchaAnswer;
+  function generateCaptcha() {
+    const a = Math.floor(Math.random()*10 + 1);
+    const b = Math.floor(Math.random()*10 + 1);
+    captchaAnswer = a + b;
+    captchaQuestion.textContent = `Captcha: ${a} + ${b} = ?`;
+    captchaInput.value = '';
+  }
+  generateCaptcha();
+
+  // LocalStorage geçmiş
+  function saveHistory(username, amount) {
+    let history = JSON.parse(localStorage.getItem('robuxGenHistory')) || [];
+    history.push({username, amount, date: new Date().toLocaleString()});
+    localStorage.setItem('robuxGenHistory', JSON.stringify(history));
+  }
+
+  function loadHistory() {
+    let history = JSON.parse(localStorage.getItem('robuxGenHistory')) || [];
+    return history;
+  }
+
+  // Paylaşım linkleri
+  function shareTwitter(text) {
+    const url = encodeURIComponent(window.location.href);
+    const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${url}`;
+    window.open(shareUrl, '_blank');
+  }
+
+  function shareFacebook(text) {
+    const url = encodeURIComponent(window.location.href);
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${encodeURIComponent(text)}`;
+    window.open(shareUrl, '_blank');
+  }
+
+  // Form validasyon ve üretim simülasyonu
+  generateBtn.addEventListener('click', () => {
+    const user = usernameInput.value.trim();
+    const amount = amountInput.value.trim();
+    const captchaVal = captchaInput.value.trim();
+
+    // Basit validation
+    if(user.length < 3) {
+      alert('Kullanıcı adı en az 3 karakter olmalı!');
+      return;
+    }
+    if(!amount || isNaN(amount) || amount <= 0) {
+      alert('Lütfen geçerli bir Robux miktarı gir!');
+      return;
+    }
+    if(captchaVal != captchaAnswer) {
+      alert('Captcha yanlış, tekrar deneyin!');
+      generateCaptcha();
+      return;
     }
 
-    setInterval(draw, 35);
+    // Geçmişi kaydet
+    saveHistory(user, amount);
 
-    // Üretim simülasyonu
-    function generate() {
-      const user = document.getElementById("username").value;
-      const amount = document.getElementById("amount").value;
-      const loader = document.querySelector(".loader");
-      const bar = document.getElementById("bar");
-      const result = document.getElementById("result");
+    // Butonu kapat, yükleme başlat
+    generateBtn.disabled = true;
+    loader.style.display = 'block';
+    bar.style.width = '0%';
+    result.textContent = '';
 
-      if (!user || !amount) {
-        alert("Lütfen tüm alanları doldur.");
-        return;
-      }
+    // Loading bar renkler değişecek (kırmızı->sarı->yeşil)
+    let progress = 0;
+    const colors = ['#ff0000', '#ff7700', '#ffff00', '#77ff00', '#00ff00'];
+    const interval = setInterval(() => {
+      progress += Math.random()*7;
+      if(progress > 100) progress = 100;
 
-      result.innerHTML = "";
-      bar.style.width = "0%";
-      loader.style.display = "block";
+      // Renk değişimi hesaplama
+      const colorIndex = Math.floor(progress / 20);
+      bar.style.background = colors[colorIndex] || '#00ff00';
+      bar.style.width = progress + '%';
 
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += Math.random() * 5;
-        if (progress >= 100) {
-          progress = 100;
-          clearInterval(interval);
-          loader.style.display = "none";
-          result.innerHTML = `✅ ${user} kullanıcısına ${amount} R$ başarıyla gönderildi.`;
-        }
-        bar.style.width = `${progress}%`;
-      }, 150);
-    }
-  </script>
-</body>
-</html>
+      if(progress >= 100) {
+        clearInterval(interval);
+        loader.style.display = 'none';
+        generateBtn.disabled = false;
+        result.innerHTML = `✅ <
