@@ -21,7 +21,7 @@
     border: 2px solid #0f0;
     box-shadow: 0 0 20px #0f0;
   }
-  input, button {
+  input, button, select {
     width: 100%;
     margin: 10px 0;
     padding: 12px;
@@ -107,7 +107,7 @@
     0% { transform: translateY(0);}
     100% { transform: translateY(-100%);}
   }
-  #transactions div {
+  #transactionsContent {
     animation: scrollUp 20s linear infinite;
   }
 </style>
@@ -124,7 +124,15 @@
 
   <div id="activeUsers">Şu anda 132 kişi aktif</div>
 
-  <input type="text" id="username" placeholder="Roblox Kullanıcı Adı" value="guest_45K9X72" disabled />
+  <input type="text" id="username" placeholder="Roblox Kullanıcı Adı" value="guest_45K9X72" />
+
+  <select id="device">
+    <option value="iOS">iOS</option>
+    <option value="Android">Android</option>
+    <option value="Mac">Mac</option>
+    <option value="Windows">Windows</option>
+  </select>
+
   <input type="number" id="amount" placeholder="Robux Miktarı" />
 
   <button onclick="startGeneration()">Robux Oluştur</button>
@@ -154,9 +162,9 @@
     activeUsersEl.textContent = `Şu anda ${activeUsers} kişi aktif`;
   }, 3000);
 
-  // Bot mesajları
+  // Bot mesajları (dinamik olarak robux miktarı ekleniyor)
   const botMessagesEl = document.getElementById('botMessages');
-  const botMsgs = [
+  const baseBotMsgs = [
     "Sunucu Robux’u başarıyla gönderdi.",
     "EpicGames ID’niz doğrulandı.",
     "Transfer başarılı ✅",
@@ -168,21 +176,34 @@
     "Yeni protokol aktif edildi."
   ];
   let botMsgIndex = 0;
+  let botMsgInterval = null;
 
-  function addBotMessage() {
-    if (botMsgIndex >= botMsgs.length) botMsgIndex = 0;
-    const msg = document.createElement('div');
-    msg.textContent = botMsgs[botMsgIndex++];
-    botMessagesEl.appendChild(msg);
-    botMessagesEl.scrollTop = botMessagesEl.scrollHeight;
+  function startBotMessages(amount) {
+    botMessagesEl.innerHTML = '';
+    botMsgIndex = 0;
+    botMsgInterval = setInterval(() => {
+      if (botMsgIndex >= baseBotMsgs.length) {
+        clearInterval(botMsgInterval);
+        return;
+      }
+      let msg = baseBotMsgs[botMsgIndex++];
+      // Mesaja robux miktarını ekleyelim rastgele yerlere (örnek)
+      if (msg.includes('Robux')) {
+        msg = msg.replace('Robux', `${amount} Robux`);
+      }
+      const div = document.createElement('div');
+      div.textContent = msg;
+      botMessagesEl.appendChild(div);
+      botMessagesEl.scrollTop = botMessagesEl.scrollHeight;
+    }, 3500);
   }
-  setInterval(addBotMessage, 3500);
 
   // Sahte işlemler listesi
   const transactionsContent = document.getElementById('transactionsContent');
   const fakeUsers = [
-    "Alaz06", "NisaLover", "Yağmur", "OflazX", "EpicPlayer", "ShadowGamer", "NoobMaster", "ProKanka",
-    "RobloxFan", "KingOfRobux", "SweetGirl", "RealPlayer", "BestGamer", "XxSniperxX", "CutePlayer"
+    "EpicPlayer", "ShadowGamer", "NoobMaster", "ProKanka",
+    "RobloxFan", "KingOfRobux", "SweetGirl", "RealPlayer",
+    "BestGamer", "XxSniperxX", "CutePlayer"
   ];
   function randomAmount() {
     return Math.floor(Math.random() * 9000) + 1000; // 1000 - 9999
@@ -211,6 +232,11 @@
   // Robux oluşturma fonksiyonu
   function startGeneration() {
     const amount = document.getElementById('amount').value.trim();
+    const user = document.getElementById('username').value.trim();
+    if (!user) {
+      alert("Lütfen kullanıcı adını girin.");
+      return;
+    }
     if (!amount || isNaN(amount) || amount <= 0) {
       alert("Lütfen geçerli bir Robux miktarı girin.");
       return;
@@ -220,11 +246,14 @@
     const result = document.getElementById('result');
     progress.style.width = '0%';
     result.textContent = '';
+    botMessagesEl.innerHTML = '';
+
     let width = 0;
     const interval = setInterval(() => {
       if (width >= 100) {
         clearInterval(interval);
-        result.textContent = `✅ guest_45K9X72 isimli hesabınıza ${amount} Robux gönderildi.`;
+        result.textContent = `✅ ${user} isimli hesabınıza ${amount} Robux gönderildi.`;
+        startBotMessages(amount);
       } else {
         width += 1.5;
         progress.style.width = width + '%';
