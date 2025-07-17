@@ -1,179 +1,156 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Free Robux Generator</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
-      font-family: 'Rubik', sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background: black;
       color: #00ff00;
       overflow-x: hidden;
-    }.matrix {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: black;
-  z-index: -1;
-  overflow: hidden;
-}
-
-canvas {
-  display: block;
-}
-
-.container {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 1rem;
-  text-align: center;
-}
-
-.title {
-  font-size: 2.5rem;
-  color: #0f0;
-  margin-bottom: 1rem;
-}
-
-.generator-panel {
-  background: #111;
-  padding: 1rem;
-  border-radius: 10px;
-  box-shadow: 0 0 15px #0f0;
-}
-
-.generator-panel input, .generator-panel select, .generator-panel button {
-  width: 100%;
-  margin: 0.5rem 0;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: none;
-}
-
-.generator-panel button {
-  background: #0f0;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.generator-panel button:hover {
-  background: #0c0;
-}
-
-.loading-bar {
-  margin-top: 1rem;
-  width: 100%;
-  height: 20px;
-  background: #333;
-  border-radius: 10px;
-  overflow: hidden;
-  display: none;
-}
-
-.loading-bar-inner {
-  width: 0%;
-  height: 100%;
-  background: lime;
-  animation: loading 5s linear forwards;
-}
-
-@keyframes loading {
-  to {
-    width: 100%;
-  }
-}
-
-.info {
-  margin-top: 2rem;
-  font-size: 0.9rem;
-  color: #0f0;
-}
-
-.footer {
-  margin-top: 3rem;
-  font-family: monospace;
-  font-size: 1.5rem;
-  color: #0ff;
-  text-align: center;
-}
-
-.location {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-}
-
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+      background: #111;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #0f0;
+    }
+    input, select, button {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      background: #222;
+      color: #0f0;
+    }
+    button {
+      background: #0f0;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #0c0;
+    }
+    .loading-bar {
+      margin-top: 1rem;
+      width: 100%;
+      height: 20px;
+      background: #333;
+      border-radius: 10px;
+      overflow: hidden;
+      display: none;
+    }
+    .loading-bar-inner {
+      width: 0%;
+      height: 100%;
+      background: lime;
+      animation: loading 5s linear forwards;
+    }
+    @keyframes loading {
+      to { width: 100%; }
+    }
+    .location {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    .footer {
+      margin-top: 3rem;
+      font-family: monospace;
+      font-size: 1.5rem;
+      color: #0ff;
+    }
+    .selected-platform {
+      margin-top: 0.5rem;
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #ff0;
+    }
+    .badge {
+      margin-top: 1rem;
+      padding: 10px;
+      background-color: #0f0;
+      color: black;
+      font-weight: bold;
+      border-radius: 8px;
+      display: none;
+      user-select: none;
+      font-size: 1.2rem;
+    }
   </style>
 </head>
 <body>
-  <div class="matrix">
-    <canvas id="matrix"></canvas>
-  </div>  <div class="container">
-    <div class="title">Free Robux Generator</div><div class="generator-panel">
-  <input type="text" placeholder="Kullanıcı Adı" />
-  <select>
-    <option>Android</option>
-    <option>iOS</option>
-    <option>Windows</option>
-  </select>
-  <input type="number" placeholder="Robux Miktarı" />
-  <button onclick="startLoading()">Robux Üret</button>
+  <div class="container">
+    <h1>Free Robux Generator</h1>
+    <input type="text" placeholder="Kullanıcı Adı" />
+    <select id="platformSelect" onchange="updatePlatform()">
+      <option value="Android">Android</option>
+      <option value="iOS">iOS</option>
+      <option value="Windows">Windows</option>
+      <option value="Xbox">Xbox</option>
+      <option value="Mac">Mac</option>
+      <option value="Web">Web</option>
+    </select>
+    <div class="selected-platform" id="selectedPlatformText">Seçilen platform: Android</div>
+    <input type="number" placeholder="Robux Miktarı" />
+    <button onclick="startLoading()">Robux Üret</button>
 
-  <div class="loading-bar" id="loadingBar">
-    <div class="loading-bar-inner"></div>
+    <div class="loading-bar" id="loadingBar">
+      <div class="loading-bar-inner"></div>
+    </div>
+
+    <div class="location">Konum: Ankara | IP: 185.216.123.54</div>
+
+    <div class="badge" id="successBadge">🏅 Tebrikler! Başarı rozeti kazandınız!</div>
+
+    <div class="footer">YAPIMCI: <span style="font-family: 'Courier New', monospace; font-size: 2rem; color: #ff0;">ALAZ OFLAZ</span></div>
   </div>
-</div>
 
-<div class="location">Konum: Ankara | IP: 192.168.1.217</div>
-
-<div class="info">
-  Premium Hesap Aktif | Robux Paketiniz hazırlanıyor...<br>
-  Yarı saydam Robux animasyonu yükleniyor...
-</div>
-
-<div class="footer">YAPIMCI: <span style="font-family: 'Courier New', monospace; font-size: 2rem; color: #ff0;">ALAZ OFLAZ</span></div>
-
-  </div>  <script>
-    // Matrix efekti
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
-
-    const letters = "01";
-    const fontSize = 16;
-    const columns = canvas.width / fontSize;
-    const drops = Array.from({ length: columns }, () => 1);
-
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "#0F0";
-      ctx.font = fontSize + "px monospace";
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters.charAt(Math.floor(Math.random() * letters.length));
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-
-        drops[i]++;
-      }
+  <script>
+    // Platform seçimi metnini güncelle
+    function updatePlatform() {
+      const select = document.getElementById('platformSelect');
+      const text = document.getElementById('selectedPlatformText');
+      text.textContent = 'Seçilen platform: ' + select.value;
     }
-
-    setInterval(draw, 33);
 
     function startLoading() {
       const bar = document.getElementById("loadingBar");
+      const innerBar = bar.querySelector(".loading-bar-inner");
+      const badge = document.getElementById("successBadge");
+
+      // Rozeti gizle
+      badge.style.display = "none";
+
       bar.style.display = "block";
+      innerBar.style.width = "0%";
+
+      innerBar.style.animation = "none";
+      innerBar.offsetHeight; // reflow
+      innerBar.style.animation = null;
+
+      setTimeout(() => {
+        innerBar.style.width = "100%";
+      }, 10);
+
+      setTimeout(() => {
+        bar.style.display = "none";
+        badge.style.display = "block";
+      }, 5100);
     }
-  </script></body>
+
+    // Sayfa yüklendiğinde platform metnini başlat
+    window.onload = updatePlatform;
+  </script>
+</body>
 </html>
