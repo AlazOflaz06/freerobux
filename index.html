@@ -2,10 +2,10 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Roblox Robux Generator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Roblox Robux Generator - Mobil Uyumlu</title>
 <style>
-  /* Genel reset ve full height */
+  /* Reset */
   * {
     margin: 0; padding: 0; box-sizing: border-box;
   }
@@ -17,67 +17,66 @@
     overflow-x: hidden;
   }
   canvas#matrix {
-    position: fixed; top: 0; left: 0;
+    position: fixed;
+    top: 0; left: 0;
     width: 100%; height: 100%;
     z-index: -1;
   }
   .container {
-    max-width: 400px;
-    width: 90%;
-    margin: 40px auto 80px;
+    max-width: 380px;
+    width: 95%;
+    margin: 50px auto 80px;
     background: rgba(0,255,153,0.1);
     border: 2px solid #00ff99;
-    border-radius: 15px;
-    padding: 30px 20px;
-    box-shadow: 0 0 20px #00ff99;
+    border-radius: 12px;
+    padding: 25px 15px;
+    box-shadow: 0 0 18px #00ff99;
     text-align: center;
-    box-sizing: border-box;
+    user-select: none;
   }
   h1 {
-    font-size: 36px;
-    margin-bottom: 25px;
+    font-size: 28px;
+    margin-bottom: 20px;
     color: #00ffcc;
-    text-shadow: 0 0 15px #00ffcc;
-    user-select: none;
+    text-shadow: 0 0 12px #00ffcc;
   }
   .logo img {
-    width: 120px;
+    width: 100px;
+    margin-bottom: 15px;
     user-select: none;
-    margin-bottom: 20px;
   }
-  input[type="text"], input[type="number"] {
+  input, select {
     width: 90%;
-    padding: 12px;
-    font-size: 18px;
-    margin: 12px 0;
-    border-radius: 8px;
+    padding: 11px;
+    margin: 10px auto;
+    font-size: 16px;
+    border-radius: 7px;
     border: none;
-    text-align: center;
     background: #000;
     color: #00ff99;
-    box-shadow: 0 0 8px #00ff99 inset;
+    box-shadow: inset 0 0 7px #00ff99;
     outline: none;
-    transition: 0.3s;
+    display: block;
   }
-  input[type="text"]:focus, input[type="number"]:focus {
-    box-shadow: 0 0 15px #00ffaa inset;
+  input:focus, select:focus {
+    box-shadow: inset 0 0 14px #00ffaa;
   }
   button {
-    cursor: pointer;
-    background-color: #00ff00;
-    color: #000;
-    font-weight: bold;
-    font-size: 20px;
-    padding: 14px 0;
+    margin-top: 18px;
     width: 95%;
+    padding: 14px 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+    background: #00ff00;
     border: none;
     border-radius: 10px;
-    margin-top: 15px;
-    box-shadow: 0 0 10px #00ff00;
-    transition: background-color 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 0 15px #00ff00;
+    transition: background 0.3s ease;
   }
   button:hover {
-    background-color: #00cc00;
+    background: #00cc00;
     box-shadow: 0 0 25px #00cc00;
   }
   .loader {
@@ -86,8 +85,8 @@
   }
   .progress {
     width: 100%;
-    height: 30px;
-    background: #222;
+    height: 28px;
+    background: #111;
     border-radius: 15px;
     overflow: hidden;
   }
@@ -95,23 +94,22 @@
     height: 100%;
     width: 0%;
     background: linear-gradient(90deg, #ff0000, #ff7700, #ffff00, #77ff00, #00ff00);
-    transition: width 0.2s linear;
+    transition: width 0.25s linear;
   }
   #result {
-    margin-top: 30px;
-    font-size: 22px;
+    margin-top: 28px;
+    font-size: 20px;
     color: #00ffcc;
     text-shadow: 0 0 10px #00ffcc;
-    min-height: 50px;
-    user-select: none;
+    min-height: 48px;
   }
   /* Lolcat footer */
   #footer {
     position: fixed;
-    bottom: 20px;
+    bottom: 18px;
     width: 100%;
     text-align: center;
-    font-size: 32px;
+    font-size: 30px;
     font-weight: 900;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     pointer-events: none;
@@ -158,25 +156,6 @@
         0 0 50px #ff4500;
     }
   }
-
-  /* Responsive mobil düzenlemeler */
-  @media (max-width: 480px) {
-    .container {
-      margin: 20px auto 60px;
-      padding: 20px 15px;
-    }
-    h1 {
-      font-size: 28px;
-    }
-    button {
-      font-size: 18px;
-      padding: 12px 0;
-    }
-    input[type="text"], input[type="number"] {
-      font-size: 16px;
-      padding: 10px;
-    }
-  }
 </style>
 </head>
 <body>
@@ -192,7 +171,21 @@
 
   <input type="text" id="username" placeholder="Kullanıcı adını gir" autocomplete="off" />
 
-  <input type="number" id="amount" placeholder="Robux miktarı" autocomplete="off" min="1" />
+  <input type="number" id="amount" placeholder="Robux miktarı" min="1" autocomplete="off" />
+
+  <select id="platform">
+    <option value="" disabled selected>Platform seç</option>
+    <option value="Mobil">Mobil</option>
+    <option value="PC">PC</option>
+    <option value="Konsol">Konsol</option>
+  </select>
+
+  <select id="speed">
+    <option value="" disabled selected>Hız seç</option>
+    <option value="Yavaş">Yavaş</option>
+    <option value="Normal">Normal</option>
+    <option value="Hızlı">Hızlı</option>
+  </select>
 
   <button id="generateBtn">ÜRET</button>
 
@@ -210,26 +203,23 @@
   const canvas = document.getElementById('matrix');
   const ctx = canvas.getContext('2d');
   let W, H;
+  const fontSize = 14;
+  let columns, drops;
+
   function resizeCanvas() {
     W = window.innerWidth;
     H = window.innerHeight;
     canvas.width = W;
     canvas.height = H;
-  }
-  resizeCanvas();
-  window.addEventListener('resize', () => {
-    resizeCanvas();
-    // matrix drops da güncellenmeli
+
     columns = Math.floor(W / fontSize);
     drops = new Array(columns).fill(1);
-  });
+  }
+  resizeCanvas();
 
-  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  const fontSize = 14;
-  let columns = Math.floor(W / fontSize);
-  let drops = new Array(columns).fill(1);
+  window.addEventListener('resize', resizeCanvas);
 
-  function draw() {
+  function drawMatrix() {
     ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
     ctx.fillRect(0, 0, W, H);
 
@@ -237,16 +227,15 @@
     ctx.font = fontSize + "px monospace";
 
     for(let i = 0; i < drops.length; i++) {
-      const text = letters.charAt(Math.floor(Math.random() * letters.length));
+      const text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".charAt(Math.floor(Math.random() * 36));
       ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-      if(drops[i] * fontSize > H && Math.random() > 0.975) {
-        drops[i] = 0;
-      }
+      if(drops[i] * fontSize > H && Math.random() > 0.975) drops[i] = 0;
+
       drops[i]++;
     }
   }
-  setInterval(draw, 35);
+  setInterval(drawMatrix, 35);
 
   // Üretim simülasyonu
   const generateBtn = document.getElementById('generateBtn');
@@ -257,6 +246,8 @@
   generateBtn.addEventListener('click', () => {
     const user = document.getElementById('username').value.trim();
     const amount = document.getElementById('amount').value.trim();
+    const platform = document.getElementById('platform').value;
+    const speed = document.getElementById('speed').value;
 
     if(user.length < 3) {
       alert('Kullanıcı adı en az 3 karakter olmalı!');
@@ -266,29 +257,41 @@
       alert('Lütfen geçerli bir Robux miktarı gir!');
       return;
     }
+    if(!platform) {
+      alert('Lütfen platform seçin!');
+      return;
+    }
+    if(!speed) {
+      alert('Lütfen hız seçin!');
+      return;
+    }
 
     generateBtn.disabled = true;
     loader.style.display = 'block';
     bar.style.width = '0%';
     result.textContent = '';
 
+    // Hıza göre yükleme süresi ayarı
+    let maxProgress = 100;
+    let speedFactor = speed === 'Yavaş' ? 3 : (speed === 'Normal' ? 1.5 : 0.8);
     let progress = 0;
+
     const colors = ['#ff0000', '#ff7700', '#ffff00', '#77ff00', '#00ff00'];
     const interval = setInterval(() => {
-      progress += Math.random() * 7;
-      if(progress > 100) progress = 100;
+      progress += Math.random() * 7 * speedFactor;
+      if(progress > maxProgress) progress = maxProgress;
 
       const colorIndex = Math.floor(progress / 20);
       bar.style.background = colors[colorIndex] || '#00ff00';
       bar.style.width = progress + '%';
 
-      if(progress >= 100) {
+      if(progress >= maxProgress) {
         clearInterval(interval);
         loader.style.display = 'none';
         generateBtn.disabled = false;
-        result.innerHTML = `✅ ${user} kullanıcısına ${amount} R$ başarıyla gönderildi.`;
+        result.innerHTML = `✅ ${user} kullanıcısına ${amount} R$ başarıyla gönderildi!<br>Platform: ${platform}<br>Hız: ${speed}`;
       }
-    }, 150);
+    }, 120);
   });
 </script>
 
